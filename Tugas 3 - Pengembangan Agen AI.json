@@ -1,0 +1,156 @@
+{
+  "name": "Tugas 3 - Pengembangan Agen AI",
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -224,
+        -32
+      ],
+      "id": "a4e7fd4d-cb1a-474a-b511-5fef0ebe9ad0",
+      "name": "When chat message received",
+      "webhookId": "aa766b05-45d6-4835-b449-8b82403b58cb"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "Kamu adalah chatbot yang bertugas menjawab pertanyaan tentang produk dan harga berdasarkan data dari Google Sheets.\n\nGunakan tool Google Sheets untuk mencari data produk.\n\nJika user bertanya harga, cari nama produk yang relevan dan berikan jawabannya dengan jelas.\n\nJika produk tidak ditemukan, jawab dengan sopan bahwa produk tidak tersedia.\n\nJawaban harus singkat, jelas, dan ramah."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -16,
+        -32
+      ],
+      "id": "17faaa47-7591-4c27-86a8-4f297194c586",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        64,
+        144
+      ],
+      "id": "0942aeba-5187-47bb-96c9-672ac3122f57",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -80,
+        144
+      ],
+      "id": "cf6ac693-4df2-45c7-adb2-e59903811509",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "NqVHoTmMdpQ4nXBf",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/13w0FtfAMRFXAe5gkkvi-KTDXecG3Z1wyL_cB7t2lx30/edit?usp=sharing",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/13w0FtfAMRFXAe5gkkvi-KTDXecG3Z1wyL_cB7t2lx30/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        192,
+        224
+      ],
+      "id": "019f6369-c07b-4e64-bbed-268263d37a25",
+      "name": "Get row(s) in sheet in Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "X0jAyeta9Sr7pbjb",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet in Google Sheets": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "bfa44fc4-c77e-4761-9865-610dfccbefdd",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "c8dfe3a5e99e695dccc398a064d8c0f0077bcda1e85dda73761fff18561132e5"
+  },
+  "id": "kcaTX88pYpz6OMgN",
+  "tags": []
+}
