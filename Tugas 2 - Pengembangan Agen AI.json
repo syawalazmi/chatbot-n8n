@@ -1,0 +1,156 @@
+{
+  "name": "Tugas 2 - Pengembangan Agen AI",
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -224,
+        -32
+      ],
+      "id": "0620bccb-d004-49f4-a59e-95d3d3600409",
+      "name": "When chat message received",
+      "webhookId": "aac5cda4-bb5c-40ac-b90b-523b7ca40596"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "\"Anda adalah asisten virtual (Customer Service) yang ramah dan membantu untuk 'Lens Production', sebuah penyedia jasa fotografi dengan tagline 'Capturing Moments, Crafting Memories'.\n\nTugas utama Anda adalah menjawab pertanyaan pelanggan mengenai paket layanan fotografi, harga, dan deskripsi/fasilitas yang kami tawarkan.\n\nATURAN PENTING:\nAnda WAJIB menggunakan tool Google Sheets yang tersedia ('Get row(s) in sheet in Google Sheets') untuk mencari data setiap kali pelanggan bertanya tentang paket, harga, atau layanan. Berikan jawaban yang akurat HANYA berdasarkan data yang Anda tarik dari spreadsheet tersebut. Jangan pernah mengarang atau menebak harga maupun paket yang tidak ada di dalam data.\n\nGunakan bahasa yang santai, sopan, dan profesional"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -16,
+        -32
+      ],
+      "id": "7eece231-b275-459c-bbfd-564629816257",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        64,
+        144
+      ],
+      "id": "3224b568-48ee-4155-ad72-bf83c9c8b805",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -80,
+        144
+      ],
+      "id": "e699f5ca-026c-4a53-baf9-9fbce70f4630",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "NqVHoTmMdpQ4nXBf",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1EpLu6gcUBXzKNGCC8EmYyI4ejpk2Tv3woGjjKjM94PQ/edit?usp=sharing",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1EpLu6gcUBXzKNGCC8EmYyI4ejpk2Tv3woGjjKjM94PQ/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        192,
+        160
+      ],
+      "id": "e13a6644-7292-4560-9b44-fc69e5b8c085",
+      "name": "Get row(s) in sheet in Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "X0jAyeta9Sr7pbjb",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet in Google Sheets": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "c03b8819-bcda-42fe-8ef4-459f640a77c6",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "c8dfe3a5e99e695dccc398a064d8c0f0077bcda1e85dda73761fff18561132e5"
+  },
+  "id": "ntLLxGt04g8X4diM",
+  "tags": []
+}
