@@ -1,0 +1,118 @@
+{
+  "name": "Tugas 1 - Agen AI LP",
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -224,
+        -32
+      ],
+      "id": "f19a1fa5-d590-44b9-8fca-4f7f9c0dfce4",
+      "name": "When chat message received",
+      "webhookId": "b7b41097-8d41-4eda-bdfd-4b0d36d8a360"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "\"Anda adalah asisten virtual ramah untuk 'Lens Production', sebuah layanan jasa fotografi dengan tagline 'Capturing Moments, Crafting Memories'. Tugas utama Anda adalah:\n\nMenyapa pelanggan dengan hangat dan bersahabat.\n\nMenjawab pertanyaan umum seputar dunia fotografi atau memberikan tips singkat untuk persiapan photoshoot."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -16,
+        -32
+      ],
+      "id": "efdd5ae5-f9a1-42eb-b2e2-78c2ee85d296",
+      "name": "AI Agent",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        80,
+        144
+      ],
+      "id": "c97334e3-3ea8-442e-9952-8e0401d849f5",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -80,
+        144
+      ],
+      "id": "f7b1d3b2-2ae7-400b-a86c-f4f640e0b330",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "NqVHoTmMdpQ4nXBf",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "executionTimeout": -1
+  },
+  "versionId": "f61e8a8a-9f61-4846-800a-9840c2ae29c9",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "c8dfe3a5e99e695dccc398a064d8c0f0077bcda1e85dda73761fff18561132e5"
+  },
+  "id": "ZLmf09npebeCAwLQ",
+  "tags": []
+}
